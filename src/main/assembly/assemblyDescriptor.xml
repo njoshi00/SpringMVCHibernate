@@ -1,0 +1,100 @@
+<assembly>
+    <id>dist</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+                <directory>${basedir}/tomcat/bin</directory>
+                <outputDirectory>/bin</outputDirectory>
+                <fileMode>755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/tomcat/conf</directory>
+            <outputDirectory>/conf</outputDirectory>
+            <fileMode>755</fileMode>
+        </fileSet>
+        <fileSet>
+        <directory>${basedir}/tomcat/lib</directory>
+        <outputDirectory>/lib</outputDirectory>
+        <fileMode>755</fileMode>
+    </fileSet>
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.properties</include>
+            </includes>
+            <outputDirectory>/conf</outputDirectory>
+        </fileSet>
+        <!--Copy project web-specific files-->
+        <fileSet>
+            <directory>src/main/webapp</directory>
+            <outputDirectory>/webapps/${app.context.path}</outputDirectory>
+        </fileSet>
+        <!--Copy project '*.class' files-->
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <excludes>
+                <exclude>**/*.properties</exclude>
+            </excludes>
+            <outputDirectory>/webapps/${app.context.path}/WEB-INF/classes</outputDirectory>
+        </fileSet>
+
+        <!--Create $ASSEMBLY_${app.context.path}/temp directory-->
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <excludes>
+                <exclude>**/*</exclude>
+            </excludes>
+            <outputDirectory>/temp</outputDirectory>
+        </fileSet>
+        <!--Create $ASSEMBLY_${app.context.path}/logs directory-->
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <excludes>
+                <exclude>**/*</exclude>
+            </excludes>
+            <outputDirectory>/logs</outputDirectory>
+        </fileSet>
+    </fileSets>
+
+    <!--Copy all dependencies-->
+    <dependencySets>
+        <!--Copy all project non-tomcat dependencies-->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/webapps/${app.context.path}/WEB-INF/lib</outputDirectory>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/webapps/${app.context.path}/WEB-INF/lib</outputDirectory>
+            <scope>provided</scope>
+            <excludes>
+                <exclude>org.apache.tomcat:*</exclude>
+            </excludes>
+        </dependencySet>
+
+        <!--Copy all project tomcat dependencies-->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <excludes>
+                <!--Tomcat juli is expected to be put to the $CATALINA_HOME/bin-->
+                <exclude>org.apache.tomcat:juli:*</exclude>
+            </excludes>
+            <outputDirectory>/lib</outputDirectory>
+        </dependencySet>
+
+        <!--Copy tomcat 'juli' dependency-->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <includes>
+                <include>org.apache.tomcat:juli:*</include>
+            </includes>
+            <outputDirectory>/bin</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+</assembly>
