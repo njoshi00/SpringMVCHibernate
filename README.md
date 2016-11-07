@@ -1,7 +1,7 @@
 How to run:
 
 1) mvn clean install
-2) check tar.gz file under target folder
+2) check tar.gz file under target folder.
 3) Unzip/open tar file (use 7zip on windows)
 4) Go to bin and run startup.bat (or .sh)
 5) Access application @ http://localhost/myspringapp/persons
